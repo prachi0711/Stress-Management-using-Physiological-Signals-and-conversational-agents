@@ -20,9 +20,9 @@ This project leverages physiological signals (e.g., IBI from BVP, EDA) from the 
 
 # **Workflow Summary**  
 
-  Data Collection: Use the WESAD dataset (ECG, EDA, ACC signals) for stress detection.
+  Data Collection: Use the WESAD dataset (BVP and EDA signals) for stress detection.
 
-  Preprocessing: Filter noise, normalize, and extract features (e.g., HRV, EDA peaks).
+  Preprocessing: Filter noise, normalize, and extract features (e.g., IBI peaks, EDA).
 
   Stress Classification: Train a model (Random Forest/1D CNN) to predict stress levels (low/medium/high).
 
