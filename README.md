@@ -1,4 +1,4 @@
-# Stress-Management-using-Physiological-Signals
+# Stress Management using Physiological Signals
 
 Stress is a common issue that significantly impacts mental and physical health, often diminishing overall well-being and productivity. Effective stress management
 is crucial, yet many individuals struggle to recognize or address their stress levels in a timely manner. Advances in technology, particularly artificial intelligence
@@ -6,5 +6,34 @@ is crucial, yet many individuals struggle to recognize or address their stress l
 management by analyzing physiological indicators such as heart rate and skin conductance, enabling early intervention through personalized, interactive support.
 
 Physiological signals—measurements of biological functions such as heart rate, skin conductance, and brain activity—provide direct insight into how the body responds to stressors. A key innovation of this system is its integration of physiological monitoring with conversational interaction facilitated by a companion robot. Unlike traditional methods that rely on self-reported assessments, physiological signals provide continuous, objective, and involuntary measurements of stress responses, making them more reliable and difficult to manipulate. These signals reflect the body’s dynamic reactions to stressors, allowing for tailored stress-relief strategies based on individual needs.
+
+This project leverages physiological signals (e.g., IBI from BVP, EDA) from the **WESAD** dataset to detect stress levels in real time. An AI pipeline classifies stress (low/medium/high), quantifies prediction uncertainty, and triggers personalized interventions via a dialogue system.
+
+# **Table of Contents**  
+1. [Data Collection](#-data-collection)  
+2. [Preprocessing](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals/blob/main/preprocessing/README.md)  
+3. [Stress Classification](#-stress-classification)  
+4. [Uncertainty Quantification](#-uncertainty-quantification)  
+5. [Decision Logic](#-decision-logic)  
+6. [Dialogue Management](#-dialogue-management)  
+
+
+## **Workflow Summary**  
+
+  Data Collection: Use the WESAD dataset (ECG, EDA, ACC signals) for stress detection.
+
+  Preprocessing: Filter noise, normalize, and extract features (e.g., HRV, EDA peaks).
+
+  Stress Classification: Train a model (Random Forest/1D CNN) to predict stress levels (low/medium/high).
+
+  Uncertainty Quantification (UQ): Compute confidence scores (entropy/variance) to assess prediction reliability.
+
+  Decision Logic:
+
+  - Low uncertainty: Proceed with predicted stress level.
+
+  - High uncertainty: Prompt user for feedback (e.g., "How are you feeling?").
+
+  Dialogue Management: Generate context-aware responses (e.g., breathing exercises for high stress).
 
 
