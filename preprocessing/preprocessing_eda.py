@@ -10,7 +10,7 @@ import neurokit2 as nk
 def extract_stress_segment(signal, labels, stress_label=2):
     return signal[labels == stress_label] # stress labelled as 2 in WESAD Dataset
 
-def extract_manual_eda_features(eda): # Manual feature
+def extract_manual_eda_features(eda): # Manual features
     eda = eda.squeeze()
     return {
         'eda_mean': np.mean(eda),
@@ -136,8 +136,6 @@ def process_eda(wesad_root):
             print(f"Failed EDA for {subject_folder} — {e}")
 
     return eda_feature_list
-
-# === Run ===
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
