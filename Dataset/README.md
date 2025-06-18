@@ -35,7 +35,7 @@ Extract the contents to:
 
 `Dataset/WESAD`
 
-For full details, refer [WESAD dataset paper](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6200468/)
+For full details, refer [WESAD dataset paper]([https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6200468/](https://doi.org/10.1145/3242969.3242985))
 
 Next Step: [Preprocessing](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals/blob/main/preprocessing/README.md)
 
