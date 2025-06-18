@@ -18,7 +18,7 @@ This project leverages physiological signals (e.g., IBI from BVP, EDA) from the 
 6. [Dialogue Management](#-dialogue-management)  
 
 
-## **Workflow Summary**  
+# **Workflow Summary**  
 
   Data Collection: Use the WESAD dataset (ECG, EDA, ACC signals) for stress detection.
 
@@ -36,4 +36,31 @@ This project leverages physiological signals (e.g., IBI from BVP, EDA) from the 
 
   Dialogue Management: Generate context-aware responses (e.g., breathing exercises for high stress).
 
+# **Environment Setup**
 
+### Step 1: Create a Virtual Environment
+
+It is highly recommended to use a virtual environment to manage dependencies:
+
+```
+python -m venv .venv
+```
+Activate the virtual environment:
+
+Linux/macOS:
+   ```
+   source .venv/bin/activate
+```
+
+Windows:
+
+    .\.venv\Scripts\activate
+    
+### Step 2: Install Dependencies
+
+Install the required dependencies:
+```
+pip install -r requirements.txt
+```
+
+This will install necessary libraries like neurokit2, requests, and others.
