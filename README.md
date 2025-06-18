@@ -10,7 +10,7 @@ Physiological signals—measurements of biological functions such as heart rate,
 This project leverages physiological signals (e.g., IBI from BVP, EDA) from the **WESAD** dataset to detect stress levels in real time. An AI pipeline classifies stress (low/medium/high), quantifies prediction uncertainty, and triggers personalized interventions via a dialogue system.
 
 # **Table of Contents**  
-1. [Data Collection](#-data-collection)  
+1. [Data Collection](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals/blob/main/Dataset/README.md) 
 2. [Preprocessing](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals/blob/main/preprocessing/README.md)  
 3. [Stress Classification](#-stress-classification)  
 4. [Uncertainty Quantification](#-uncertainty-quantification)  
