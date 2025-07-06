@@ -23,9 +23,16 @@ def extract_ibi_features(ibi): # Manual features
         'ibi_median': np.median(ibi)
     }
 
-# Visualization 
-def visualize_ibi_baseline_stress(subject, bvp_baseline, peaks_baseline, ibi_baseline,
-                                  bvp_stress, peaks_stress, ibi_stress, output_dir=None):
+def segment_windows(signal, window_size=30*64, step=15*64): # Windowing  30s and 50% overlap
+    windows = []
+    for start in range(0, len(signal) - window_size + 1, step):
+        end = start + window_size
+        windows.append(signal[start:end])
+    return windows
+
+# Visualization
+def visualize_ibi(subject, bvp_baseline, peaks_baseline, ibi_baseline,
+                  bvp_stress, peaks_stress, ibi_stress, output_dir=None):
     if output_dir is None:
         output_dir = os.path.join(script_dir, "plots", "IBI")
     os.makedirs(output_dir, exist_ok=True)
@@ -33,12 +40,12 @@ def visualize_ibi_baseline_stress(subject, bvp_baseline, peaks_baseline, ibi_bas
     fig, axes = plt.subplots(3, 2, figsize=(14, 10))
 
     # Raw BVP
-    axes[0, 0].plot(bvp_baseline, color='gray')
-    axes[0, 0].set_title("Baseline - Raw BVP")
+    axes[0,0].plot(bvp_baseline)
+    axes[0,0].set_title("Baseline - Raw BVP")
     axes[0, 0].set_ylabel("Amplitude")
 
-    axes[0, 1].plot(bvp_stress, color='gray')
-    axes[0, 1].set_title("Stress - Raw BVP")
+    axes[0,1].plot(bvp_stress)
+    axes[0,1].set_title("Stress - Raw BVP")
 
     # Peaks
     axes[1, 0].plot(bvp_baseline, label="BVP")
@@ -60,15 +67,14 @@ def visualize_ibi_baseline_stress(subject, bvp_baseline, peaks_baseline, ibi_bas
     axes[2, 1].plot(ibi_stress * 1000, color='red')
     axes[2, 1].set_title("Stress - IBI (ms)")
     axes[2, 1].set_xlabel("Beat Number")
+    axes[2, 0].set_ylabel("IBI (ms)")
 
-    plt.tight_layout(rect=[0, 0.03, 1, 0.95])
-
-    plot_path = os.path.join(output_dir, f"{subject}_ibi_plot.png")
-    plt.savefig(plot_path)
+    plt.tight_layout(rect=[0,0.03,1,0.95])
+    plt.savefig(os.path.join(output_dir, f"{subject}_ibi_plot.png"))
     plt.close()
 
-# Main Processing 
-def process_wesad_ibi(wesad_root):
+# Main Processing
+def process_ibi(wesad_root):
     bad_subjects = ['S1', 'S12'] # bad files according to WESAD_readME
     ibi_feature_list = []
 
@@ -81,74 +87,65 @@ def process_wesad_ibi(wesad_root):
 
         subject_path = os.path.join(wesad_root, subject_folder, f"{subject_folder}.pkl")
         if not os.path.isfile(subject_path):
-            print(f"Missing file for {subject_folder}")
             continue
 
-        print(f"Processing {subject_folder}")
+        print(f"Processing IBI for {subject_folder}")
 
         try:
             with open(subject_path, 'rb') as file:
                 data = pickle.load(file, encoding='latin1')
 
             bvp_signal = data['signal']['wrist']['BVP']
-            original_labels = data['label']
-
+            labels = data['label']
             bvp_labels = np.interp(np.arange(len(bvp_signal)),
-                                   np.linspace(0, len(bvp_signal) - 1, len(original_labels)),
-                                   original_labels).round().astype(int)
-
-            ibi_data = {}
+                                   np.linspace(0, len(bvp_signal)-1, len(labels)),
+                                   labels).round().astype(int)
 
             for label_value, label in [(1, "baseline"), (2, "stress")]: # Extract stress and baseline label from WESAD dataset
-                bvp_cond = bvp_signal[bvp_labels == label_value].squeeze()
+                bvp_segment = bvp_signal[bvp_labels == label_value].squeeze()
+                windows = segment_windows(bvp_segment, window_size=30*64, step=15*64)
 
-                if len(bvp_cond) < 10:
-                    #print(f"{subject_folder} — insufficient {label} data")
-                    continue
+                for i, window in enumerate(windows):
+                    ibi, peaks = extract_ibi_from_bvp_manual(window)
+                    if len(ibi) < 2:
+                        #print(f"{subject_folder} — insufficient IBI for {label}")
+                        continue
 
-                ibi_manual, peaks_manual = extract_ibi_from_bvp_manual(bvp_cond)
+                    feats = extract_ibi_features(ibi)
+                    feats['subject'] = subject_folder
+                    feats['label'] = label
+                    feats['window'] = i+1
+                    ibi_feature_list.append(feats)
 
-                if len(ibi_manual) < 2:
-                    #print(f"{subject_folder} — insufficient IBI for {label}")
-                    continue
-
-                ibi_feats = extract_ibi_features(ibi_manual)
-                ibi_feats['subject'] = subject_folder
-                ibi_feats['label'] = label
-                ibi_feature_list.append(ibi_feats)
-
-                ibi_csv_path = os.path.join(
+                    ibi_csv_path = os.path.join(
                     ibi_output_dir, f"{subject_folder}_{label}_ibi.csv"
-                )
-                np.savetxt(ibi_csv_path, ibi_manual, delimiter=",")
+                    )
+                    np.savetxt(ibi_csv_path, ibi, delimiter=",")
 
-                ibi_data[f"{label}_bvp"] = bvp_cond
-                ibi_data[f"{label}_peaks"] = peaks_manual
-                ibi_data[f"{label}_ibi"] = ibi_manual
 
-            if all(k in ibi_data for k in ["baseline_bvp", "baseline_peaks", "baseline_ibi",
-                                           "stress_bvp", "stress_peaks", "stress_ibi"]):
-                visualize_ibi_baseline_stress(
-                    subject_folder,
-                    ibi_data["baseline_bvp"],
-                    ibi_data["baseline_peaks"],
-                    ibi_data["baseline_ibi"],
-                    ibi_data["stress_bvp"],
-                    ibi_data["stress_peaks"],
-                    ibi_data["stress_ibi"]
-                )
+
+            visualize_ibi(
+                subject_folder,
+                bvp_signal[bvp_labels==1],
+                extract_ibi_from_bvp_manual(bvp_signal[bvp_labels==1])[1],
+                extract_ibi_from_bvp_manual(bvp_signal[bvp_labels==1])[0],
+                bvp_signal[bvp_labels==2],
+                extract_ibi_from_bvp_manual(bvp_signal[bvp_labels==2])[1],
+                extract_ibi_from_bvp_manual(bvp_signal[bvp_labels==2])[0]
+            )
 
         except Exception as e:
-            print(f"Failed {subject_folder} — {e}")
+            print(f"Failed IBI for {subject_folder}: {e}")
 
     return ibi_feature_list
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-
 if __name__ == "__main__":
+    script_dir = os.path.dirname(os.path.abspath(__file__))
     wesad_path = os.path.join(script_dir, "..", "Dataset", "WESAD")
-    ibi_features = process_wesad_ibi(wesad_path)
-    output_csv_path = os.path.join(script_dir, "data", "ibi_features_label.csv")
+    data_dir = os.path.join(script_dir, "data")
+    os.makedirs(data_dir, exist_ok=True)
+
+    ibi_features = process_ibi(wesad_path)
     df_ibi = pd.DataFrame(ibi_features)
-    df_ibi.to_csv(output_csv_path, index=False)
-    print(f"IBI features saved to ibi_features_label.csv")
+    df_ibi.to_csv(os.path.join(data_dir, "ibi_features.csv"), index=False)
+    print("IBI features saved to ibi_features.csv")
