@@ -10,6 +10,8 @@ Processes Electrodermal Activity (EDA) signals from the WESAD dataset.
 
 #### Key Features:
 - Extracts segments for baseline (label=1) and stress (label=2) from EDA signals.
+- Applies windowing with 30-second windows and 50% overlap (15s step size)
+  - EDA sampling rate: 4Hz → 120 samples per window
 - Computes two types of features:
   - **Manual Features**: Basic statistical measures (mean, std, min, max, etc.)
   - **NeuroKit2 Features**: Advanced EDA metrics (phasic/tonic components, SCR features)
@@ -19,7 +21,7 @@ Processes Electrodermal Activity (EDA) signals from the WESAD dataset.
   - Skin Conductance Response (SCR - phasic component)
   - Skin Conductance Level (SCL - tonic component)
 - Handles bad subjects (S1, S12) as noted in WESAD documentation
-- Saves features to `data/eda_features_label.csv`.
+- Saves features to `data/eda_features.csv`.
 
 #### Output:
 - CSV file with extracted EDA features
@@ -31,6 +33,8 @@ Processes Blood Volume Pulse (BVP) signals to extract Inter-Beat Intervals (IBI)
 
 #### Key Features:
 - Detects peaks in BVP signal to calculate IBI
+  - BVP sampling rate: 64Hz → IBI derived from peak detection
+- Applies windowing with 30-second windows and 50% overlap (15s step size)
 - Computes statistical features of IBI:
   - Mean, standard deviation, min/max, range, median
 - Generates visualizations:
@@ -39,7 +43,7 @@ Processes Blood Volume Pulse (BVP) signals to extract Inter-Beat Intervals (IBI)
   - Extracted IBI series
 - Saves individual IBI series to CSV files
 - Handles bad subjects (S1, S12)
-- Saves features to `data/ibi_features_label.csv`
+- Saves features to `data/ibi_features.csv`
 
 #### Output:
 - CSV file with extracted IBI features
