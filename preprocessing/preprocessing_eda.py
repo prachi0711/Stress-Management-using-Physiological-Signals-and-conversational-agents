@@ -3,12 +3,13 @@ import pickle
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import neurokit2 as nk 
+import neurokit2 as nk
+
 
 # Feature Extraction Functions 
+def extract_label_segment(signal, labels, target_label):
+    return signal[labels == target_label] # Extract stress and baseline label from WESAD dataset
 
-def extract_stress_segment(signal, labels, stress_label=2):
-    return signal[labels == stress_label] # stress labelled as 2 in WESAD Dataset
 
 def extract_manual_eda_features(eda): # Manual features
     eda = eda.squeeze()
@@ -22,7 +23,8 @@ def extract_manual_eda_features(eda): # Manual features
         'eda_kurtosis': pd.Series(eda).kurtosis()
     }
 
-def extract_neurokit_eda_features(eda, sampling_rate=4):  # Features from Neurokit2
+
+def extract_neurokit_eda_features(eda, sampling_rate=4): # Features from Neurokit2
     try:
         eda_cleaned = nk.eda_clean(eda, sampling_rate=sampling_rate)
         signals, info = nk.eda_process(eda_cleaned, sampling_rate=sampling_rate)
@@ -32,58 +34,65 @@ def extract_neurokit_eda_features(eda, sampling_rate=4):  # Features from Neurok
         print(f"NeuroKit EDA extraction failed: {e}")
         return {}
 
+
 def downsample_labels(original_labels, target_length):
     indices = np.linspace(0, len(original_labels) - 1, target_length).astype(int)
     return original_labels[indices]
 
+
 # Visualization 
 
-def visualize_eda(subject, eda, sampling_rate=4, output_dir=None):
+def visualize_eda(subject, eda_baseline, eda_stress, sampling_rate=4, output_dir=None):
     if output_dir is None:
-        output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "plots", "eda")
+        output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "plots", "EDA")
 
     os.makedirs(output_dir, exist_ok=True)
 
     try:
-        eda_cleaned = nk.eda_clean(eda, sampling_rate=sampling_rate)
-        signals, info = nk.eda_process(eda_cleaned, sampling_rate=sampling_rate)
+        eda_cleaned_baseline = nk.eda_clean(eda_baseline, sampling_rate=sampling_rate)
+        signals_baseline, _ = nk.eda_process(eda_cleaned_baseline, sampling_rate=sampling_rate)
 
-        plt.figure(figsize=(14, 10))
+        eda_cleaned_stress = nk.eda_clean(eda_stress, sampling_rate=sampling_rate)
+        signals_stress, _ = nk.eda_process(eda_cleaned_stress, sampling_rate=sampling_rate)
+
+        fig, axes = plt.subplots(4, 2, figsize=(16, 12), sharex='row')
+        fig.suptitle(f"{subject} - Baseline vs Stress EDA", fontsize=18)
 
         # Raw EDA
-        plt.subplot(4, 1, 1)
-        plt.plot(eda, color='gray')
-        plt.title("Raw EDA")
-        plt.xlabel("Sample")
-        plt.ylabel("EDA (μS)")
+        axes[0,0].plot(eda_baseline, color='gray')
+        axes[0,0].set_title("Baseline - Raw EDA")
+        axes[0,0].set_ylabel("μS")
 
-        # Cleaned EDA
-        plt.subplot(4, 1, 2)
-        plt.plot(signals["EDA_Clean"], color='blue')
-        plt.title("Cleaned EDA")
-        plt.xlabel("Sample")
-        plt.ylabel("EDA (μS)")
+        axes[0,1].plot(eda_stress, color='gray')
+        axes[0,1].set_title("Stress - Raw EDA")
 
-        # SCR (Phasic)
-        plt.subplot(4, 1, 3)
-        plt.plot(signals["EDA_Phasic"], color='orange')
-        plt.title("SCR (Phasic Component)")
-        plt.xlabel("Sample")
-        plt.ylabel("Phasic (μS)")
+        # Cleaned
+        axes[1,0].plot(signals_baseline["EDA_Clean"], color='blue')
+        axes[1,0].set_title("Baseline - Cleaned EDA")
 
-        # SCL (Tonic)
-        plt.subplot(4, 1, 4)
-        plt.plot(signals["EDA_Tonic"], color='green')
-        plt.title("SCL (Tonic Component)")
-        plt.xlabel("Sample")
-        plt.ylabel("Tonic (μS)")
+        axes[1,1].plot(signals_stress["EDA_Clean"], color='blue')
+        axes[1,1].set_title("Stress - Cleaned EDA")
 
-        plt.suptitle(f"{subject} - EDA Signal Breakdown", fontsize=16)
-        plt.tight_layout(rect=[0, 0.03, 1, 0.97])
+        # Phasic
+        axes[2,0].plot(signals_baseline["EDA_Phasic"], color='orange')
+        axes[2,0].set_title("Baseline - Phasic (SCR)")
+
+        axes[2,1].plot(signals_stress["EDA_Phasic"], color='orange')
+        axes[2,1].set_title("Stress - Phasic (SCR)")
+
+        # Tonic
+        axes[3,0].plot(signals_baseline["EDA_Tonic"], color='green')
+        axes[3,0].set_title("Baseline - Tonic (SCL)")
+        axes[3,0].set_xlabel("Sample")
+
+        axes[3,1].plot(signals_stress["EDA_Tonic"], color='green')
+        axes[3,1].set_title("Stress - Tonic (SCL)")
+        axes[3,1].set_xlabel("Sample")
+
+        plt.tight_layout(rect=[0, 0.03, 1, 0.95])
 
         plot_eda = os.path.join(output_dir, f"eda_plot_{subject}.png")
         plt.savefig(plot_eda)
-        plt.close()
         plt.close()
 
     except Exception as e:
@@ -95,7 +104,7 @@ def visualize_eda(subject, eda, sampling_rate=4, output_dir=None):
 def process_eda(wesad_root):
     bad_subjects = ['S1', 'S12'] # bad files according to WESAD_readME
     eda_feature_list = []
-    sampling_rate = 4 
+    sampling_rate = 4
 
     for subject_folder in sorted(os.listdir(wesad_root)):
         if not subject_folder.startswith("S") or subject_folder in bad_subjects:
@@ -103,10 +112,10 @@ def process_eda(wesad_root):
 
         subject_path = os.path.join(wesad_root, subject_folder, f"{subject_folder}.pkl")
         if not os.path.isfile(subject_path):
-            print(f"Missing file for {subject_folder}")
+            #print(f"Missing file for {subject_folder}")
             continue
 
-        print(f"Processing EDA for {subject_folder}")
+        #print(f"Processing EDA for {subject_folder}")
 
         try:
             with open(subject_path, 'rb') as file:
@@ -115,37 +124,47 @@ def process_eda(wesad_root):
             eda_signal = data['signal']['wrist']['EDA']
             original_labels = data['label']
             eda_labels = downsample_labels(original_labels, len(eda_signal))
-            eda_stress = extract_stress_segment(eda_signal, eda_labels)
 
-            if len(eda_stress) < 10:
-                print(f"{subject_folder} — insufficient stress EDA data")
+            eda_baseline = extract_label_segment(eda_signal, eda_labels, target_label=1)
+            eda_stress = extract_label_segment(eda_signal, eda_labels, target_label=2)
+
+            if len(eda_baseline) < 10 or len(eda_stress) < 10:
+                print(f"{subject_folder} — insufficient data for baseline or stress")
                 continue
 
-            manual_feats = extract_manual_eda_features(eda_stress)
-            neurokit_feats = extract_neurokit_eda_features(eda_stress, sampling_rate=sampling_rate)
+            # Baseline features
+            manual_feats_baseline = extract_manual_eda_features(eda_baseline)
+            neurokit_feats_baseline = extract_neurokit_eda_features(eda_baseline, sampling_rate=sampling_rate)
+            combined_baseline = {**manual_feats_baseline, **neurokit_feats_baseline}
+            combined_baseline['subject'] = subject_folder
+            combined_baseline['label'] = "baseline"
+            eda_feature_list.append(combined_baseline)
 
-            combined_feats = {**manual_feats, **neurokit_feats}  
-            combined_feats['subject'] = subject_folder
-            eda_feature_list.append(combined_feats)
+            # Stress features
+            manual_feats_stress = extract_manual_eda_features(eda_stress)
+            neurokit_feats_stress = extract_neurokit_eda_features(eda_stress, sampling_rate=sampling_rate)
+            combined_stress = {**manual_feats_stress, **neurokit_feats_stress}
+            combined_stress['subject'] = subject_folder
+            combined_stress['label'] = "stress"
+            eda_feature_list.append(combined_stress)
 
-            visualize_eda(subject_folder, eda_stress)
-
-            #print(f"{subject_folder} — EDA samples: {len(eda_stress)}")
+            visualize_eda(subject_folder, eda_baseline, eda_stress)
 
         except Exception as e:
             print(f"Failed EDA for {subject_folder} — {e}")
 
     return eda_feature_list
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == "__main__":
+    script_dir = os.path.dirname(os.path.abspath(__file__))
     wesad_path = os.path.join(script_dir, "..", "Dataset", "WESAD")
     data_dir = os.path.join(script_dir, "data")
-    plots_dir = os.path.join(script_dir, "plots", "eda")
+    plots_dir = os.path.join(script_dir, "plots", "EDA")
     os.makedirs(data_dir, exist_ok=True)
     os.makedirs(plots_dir, exist_ok=True)
+
     eda_features = process_eda(wesad_path)
     df_eda = pd.DataFrame(eda_features)
-    df_eda.to_csv(os.path.join(data_dir, "eda_features.csv"), index=False)
-    print("EDA features saved to eda_features.csv")
+    df_eda.to_csv(os.path.join(data_dir, "eda_features_label.csv"), index=False)
+    print("EDA features saved to eda_features_label.csv")
