@@ -4,7 +4,7 @@ This document contains scripts for preprocessing Electrodermal Activity (EDA) an
 
 ## Scripts 
 
-### 1. `preprocessing_eda.py`
+### 1. `eda_features.py`
 
 Processes Electrodermal Activity (EDA) signals from the WESAD dataset.
 
@@ -26,7 +26,7 @@ Processes Electrodermal Activity (EDA) signals from the WESAD dataset.
 - CSV file with extracted EDA features
 - Visualization plots in `plots/EDA/` directory (side-by-side baseline vs. stress plots)
 
-### 2. `preprocessing_ibi.py`
+### 2. `ibi_features.py`
 
 Processes Blood Volume Pulse (BVP) signals to extract Inter-Beat Intervals (IBI).
 
@@ -59,9 +59,10 @@ Processes Blood Volume Pulse (BVP) signals to extract Inter-Beat Intervals (IBI)
 1. Place the WESAD dataset in the `Dataset/WESAD/` directory.
 2. Run the scripts:
    ```
-   python preprocessing_eda.py
-   python preprocessing_ibi.py
+   python eda_features.py
+   python ibi_features.py
    ```
 
 Next Step: [Stress Classification]()
+
 
