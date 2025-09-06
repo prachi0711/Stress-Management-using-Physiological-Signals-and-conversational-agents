@@ -16,11 +16,7 @@ For this Project, EDA and BVP signals are used which are collected from E4 weara
 
 
 ### **Stress Level Segmentation**  
-To deal with stress data, Label 2 is extracted from the dataset and is then further used for preprocesssing.
-
-- Label 2 (Stress) is further split into **low/medium/high** stress levels based on:  
-  - **EDA peaks** (top 33% = high stress).  
-  - **BVP-derived Interbeat Intervals**.  
+To deal with stress data, Label 2 is extracted from the dataset and is then further used for preprocesssing. Label 1 is extracted and used as a non-stress. 
 
 ### **Validation Approach**  
 - **Leave-One-Subject-Out (LOSO)**: Model trained on 14 subjects, tested on the held-out subject.  
