@@ -57,12 +57,14 @@ Processes Blood Volume Pulse (BVP) signals to extract Inter-Beat Intervals (IBI)
 ### Usage:
 1. Place the WESAD dataset in the `Dataset/WESAD/` directory.
 2. Run the scripts:
-   ```
+   ```bash
+   cd preprocessing
    python eda_features.py
    python ibi_features.py
    ```
 
 Next Step: [Stress Classification](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals-and-conversational-agents/blob/main/stress_classification/README.md)
+
 
 
 
