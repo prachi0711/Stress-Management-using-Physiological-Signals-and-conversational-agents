@@ -1,4 +1,4 @@
-# Stress Management using Physiological Signals
+# Stress Management using Physiological Signals and Conversational Agents
 
 Stress is a common issue that significantly impacts mental and physical health, often diminishing overall well-being and productivity. Effective stress management
 is crucial, yet many individuals struggle to recognize or address their stress levels in a timely manner. Advances in technology, particularly artificial intelligence
@@ -7,15 +7,15 @@ management by analyzing physiological indicators such as heart rate and skin con
 
 Physiological signals—measurements of biological functions such as heart rate, skin conductance, and brain activity—provide direct insight into how the body responds to stressors. A key innovation of this system is its integration of physiological monitoring with conversational interaction facilitated by a companion robot. Unlike traditional methods that rely on self-reported assessments, physiological signals provide continuous, objective, and involuntary measurements of stress responses, making them more reliable and difficult to manipulate. These signals reflect the body’s dynamic reactions to stressors, allowing for tailored stress-relief strategies based on individual needs.
 
-This project leverages physiological signals (e.g., IBI from BVP, EDA) from the **WESAD** dataset to detect stress levels in real time. An AI pipeline classifies stress (low/medium/high), quantifies prediction uncertainty, and triggers personalized interventions via a dialogue system.
+This project leverages physiological signals (e.g., IBI from BVP, EDA) from the **WESAD** dataset to detect stress levels in real time. An AI pipeline classifies stress, quantifies prediction uncertainty, and triggers personalized interventions via a dialogue system.
 
 # **Table of Contents**  
 1. [Data Collection](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals/blob/main/Dataset/README.md) 
 2. [Preprocessing](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals/blob/main/preprocessing/README.md)  
 3. [Stress Classification](#-stress-classification)  
 4. [Uncertainty Quantification](#-uncertainty-quantification)  
-5. [Decision Logic](#-decision-logic)  
-6. [Dialogue Management](#-dialogue-management)  
+5. [Dialogue Management](#-dialogue-management)
+6. [Ros Node](#-Ros Node) 
 
 
 # **Workflow Summary**  
@@ -24,9 +24,9 @@ This project leverages physiological signals (e.g., IBI from BVP, EDA) from the 
 
   Preprocessing: Filter noise, normalize, and extract features (e.g., IBI peaks, EDA).
 
-  Stress Classification: Train a model (Random Forest/1D CNN) to predict stress levels (low/medium/high).
+  Stress Classification: Train a model (Random Forest/1D CNN) to predict stress.
 
-  Uncertainty Quantification (UQ): Compute confidence scores (entropy/variance) to assess prediction reliability.
+  Uncertainty Quantification (UQ): Compute confidence scores (entropy) to assess prediction reliability.
 
   Decision Logic:
 
@@ -34,7 +34,7 @@ This project leverages physiological signals (e.g., IBI from BVP, EDA) from the 
 
   - High uncertainty: Prompt user for feedback (e.g., "How are you feeling?").
 
-  Dialogue Management: Generate context-aware responses (e.g., breathing exercises for high stress).
+  Dialogue Management: Generate context-aware responses (e.g., breathing exercises for stress).
 
 # **Environment Setup**
 
