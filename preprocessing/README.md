@@ -62,7 +62,8 @@ Processes Blood Volume Pulse (BVP) signals to extract Inter-Beat Intervals (IBI)
    python ibi_features.py
    ```
 
-Next Step: [Stress Classification]()
+Next Step: [Stress Classification](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals-and-conversational-agents/blob/main/stress_classification/README.md)
+
 
 
 
