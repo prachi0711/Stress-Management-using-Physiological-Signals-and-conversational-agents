@@ -20,11 +20,11 @@ Processes Electrodermal Activity (EDA) signals from the WESAD dataset.
   - Skin Conductance Response (SCR - phasic component)
   - Skin Conductance Level (SCL - tonic component)
 - Handles bad subjects (S1, S12) as noted in WESAD documentation
-- Saves features to `data/eda_features.csv`.
+- Saves features to `data/eda_features_{window_size}.csv`.
 
 #### Output:
 - CSV file with extracted EDA features
-- Visualization plots in `plots/EDA/` directory (side-by-side baseline vs. stress plots)
+- Visualization plots in `plots/EDA/` directory (baseline vs. stress comparisons).
 
 ### 2. `ibi_features.py`
 
@@ -48,11 +48,10 @@ Processes Blood Volume Pulse (BVP) signals to extract Inter-Beat Intervals (IBI)
   - Extracted IBI series
 - Saves individual IBI series to CSV files
 - Handles bad subjects (S1, S12)
-- Saves features to `data/ibi_features.csv`
+- Saves features to `data/ibi_features_{window_size}.csv`.
 
 #### Output:
 - CSV file with extracted IBI features
-- Individual IBI series in `data/ibi_csvs/`
 - Visualization plots in `plots/IBI/` directory (baseline vs. stress comparisons).
 
 ### Usage:
@@ -64,5 +63,6 @@ Processes Blood Volume Pulse (BVP) signals to extract Inter-Beat Intervals (IBI)
    ```
 
 Next Step: [Stress Classification]()
+
 
 
