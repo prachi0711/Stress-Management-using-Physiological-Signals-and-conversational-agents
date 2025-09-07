@@ -64,3 +64,5 @@ pip install -r requirements.txt
 ```
 
 This will install necessary libraries like neurokit2, requests, and others.
+
+To get more information about this project, please follow the [report]()
