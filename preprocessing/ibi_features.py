@@ -56,7 +56,7 @@ def visualize_ibi(subject, bvp_baseline, peaks_baseline, ibi_baseline, threshold
     axes[0,0].axhline(y=threshold_baseline, color='r', linestyle='--', label='Threshold')
     axes[0,0].set_title("Baseline - Raw BVP with Threshold")
     axes[0,0].set_xlabel("Samples")
-    axes[0,0].set_ylabel("Amplitude")
+    axes[0,0].set_ylabel("Amplitude (nW)")
     axes[0,0].legend()
 
     # Raw BVP - Stress
@@ -64,7 +64,7 @@ def visualize_ibi(subject, bvp_baseline, peaks_baseline, ibi_baseline, threshold
     axes[0,1].axhline(y=threshold_stress, color='r', linestyle='--', label='Threshold')
     axes[0,1].set_title("Stress - Raw BVP with Threshold")
     axes[0,1].set_xlabel("Samples")
-    axes[0,1].set_ylabel("Amplitude")
+    axes[0,1].set_ylabel("Amplitude (nW)")
     axes[0,1].legend()
 
     # Peak detection - Baseline
@@ -72,7 +72,7 @@ def visualize_ibi(subject, bvp_baseline, peaks_baseline, ibi_baseline, threshold
     axes[1,0].plot(peaks_baseline, bvp_baseline[peaks_baseline], 'rx', label="Detected Peaks")
     axes[1,0].set_title("Baseline - Peak Detection")
     axes[1,0].set_xlabel("Samples")
-    axes[1,0].set_ylabel("Amplitude")
+    axes[1,0].set_ylabel("Amplitude (nW)")
     axes[1,0].legend()
 
     # Peak detection - Stress
@@ -80,7 +80,7 @@ def visualize_ibi(subject, bvp_baseline, peaks_baseline, ibi_baseline, threshold
     axes[1,1].plot(peaks_stress, bvp_stress[peaks_stress], 'rx', label="Detected Peaks")
     axes[1,1].set_title("Stress - Peak Detection")
     axes[1,1].set_xlabel("Samples")
-    axes[1,1].set_ylabel("Amplitude")
+    axes[1,1].set_ylabel("Amplitude (nW)")
     axes[1,1].legend()
 
     # IBI series - Baseline
