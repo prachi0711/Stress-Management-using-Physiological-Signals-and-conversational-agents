@@ -8,7 +8,7 @@ It includes:
   using a RF model with entropy UQ.
 
 - A CSV publisher node (`csv_publisher.py`) for publishing preprocessed physiological features (EDA + IBI) as ROS messages. For the testing purpose; synthetic data is used which is generated in this way -
-  [synethetic data]()
+  [synethetic data](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals-and-conversational-agents/blob/main/synthetic_data/README.md)
 
 ## 1. Create ROS2 Package
 
@@ -141,4 +141,5 @@ Example responses:
 * `yes` / `no` → accepts/rejects breathing exercise.
 * `stressed` / `calm` → explicit state feedback.
 * `need_help` / `no_help` → request or reject assistance.
+
 
