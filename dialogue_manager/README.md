@@ -27,4 +27,5 @@ The Dialogue Manager (`dialogue_manager.py`) connects stress classification with
 | **User feedback = no\_help**                  | “Okay, I’ll give you some space. Let me know if you need support later.”                          | End interaction                  |
 | **Other feedback**                            | “Thanks for sharing. I’ll keep that in mind.” / "I didn't understand your response. Please say 'yes' or 'no' if you'd like a breathing exercise." | Neutral acknowledgment  / Asking for Clarification|
 
-Next Step: [ROS2 Node]()
+Next Step: [ROS2 Node](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals-and-conversational-agents/blob/main/ros_node/README.md)
+
