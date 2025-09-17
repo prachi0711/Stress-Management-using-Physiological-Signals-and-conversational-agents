@@ -4,7 +4,7 @@ This module extends the stress classification pipeline by incorporating  UQ, whi
 
 Two different UQ approaches are implemented depending on the model:
 
-1. CNN with Monte Carlo (MC) Dropout
+1. **CNN with Monte Carlo (MC) Dropout**
 
 Implemented in `cnn_UQ.py`.
 
@@ -18,7 +18,7 @@ Uses MC Dropout at inference:
   
  - Entropy is computed to quantify prediction uncertainty.
 
-2. Random Forest with Predictive Entropy
+2. **Random Forest with Predictive Entropy**
 
 Implemented in `random_forest_UQ.py`.
 
@@ -42,5 +42,40 @@ Results of:
   
  - Incorrect & Uncertain predictions
 
+## Usage
+
+#### **1. CNN with UQ**
+
+```bash
+cd uncertainty_quantification
+python cnn_UQ.py
+```
+
+* Performs Leave-One-Subject-Out (LOSO) cross-validation.
+* Trains a CNN with early stopping.
+* Uses MC Dropout for uncertainty estimation.
+* Saves:
+
+  * Trained CNN weights → `cnn_uq_model_60.pt`
+  * Scaler → `cnn_scaler.save`
+---
+
+#### **2. Random Forest with UQ**
+
+```bash
+cd uncertainty_quantification
+python random_forest_UQ.py
+```
+
+* Performs LOSO cross-validation.
+* Trains a Random Forest on top-selected features.
+* Uses predictive entropy for UQ.
+* Saves:
+
+  * Final RF model → `rf_uq_model_60.pkl`
+  * Scaler → `rf_scaler.save`
+
+
 Next Step: [Dialogue Manager](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals-and-conversational-agents/blob/main/dialogue_manager/README.md)
+
 
