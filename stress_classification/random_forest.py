@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import SelectKBest, mutual_info_classif
 from sklearn.metrics import accuracy_score, classification_report
 import matplotlib.pyplot as plt
+import seaborn as sns
 import os
 
 window_sizes = [30, 45, 60, 75, 90, 120]
@@ -86,6 +87,27 @@ for window_size in window_sizes:
         print(f"Baseline F1: {result_entry['baseline_f1']:.4f}")
 
 results_df = pd.DataFrame(final_results)
+
+plt.figure(figsize=(8, 6))
+sns.lineplot(
+    data=results_df,
+    x="k_features",
+    y="accuracy",
+    hue="window_size",
+    style="window_size",
+    markers=True,
+    dashes=False,
+    palette="tab10",   
+    linewidth=2.2
+)
+
+plt.title("Accuracy vs Number of Features")
+plt.xlabel("Number of Selected Features (k)")
+plt.ylabel("Accuracy")
+plt.legend(title="Window Size (s)")
+plt.grid(True)
+plt.tight_layout()
+plt.show()
 
 print("Result BY window size (Best k for each window)")
 summary_by_window = results_df.loc[results_df.groupby('window_size')['accuracy'].idxmax()]
