@@ -41,8 +41,8 @@ The Random Forest model showed a significant improvement over the baseline. The 
 |       30        |     15     |  73.85%  |  72.54%   |   75.05%    |
 |       45        |     15     |  74.02%  |  69.54%   |   77.35%    |
 |       60        |     16     |  76.50%  |  72.48%   |   79.50%    |
-|       75        |     15     |  72.41%  |  64.29%   |   77.53%    |
-|       90        |     10     |  74.90%  |  66.67%   |   79.88%    |
+|       75        |     15     |  72.41%  |  64.29%   |   77.52%    |
+|       90        |     15     |  71.42%  |  63.36%   |   76.58%    |
 |       120       |     10     |  73.33%  |  64.86%   |   78.51%    |
 
 ### 3. 1D Convolutional Neural Network (1D CNN)
@@ -92,4 +92,5 @@ The CNN model performed competitively, demonstrating the ability of neural netwo
 
 Each script will run LOSO CV for all window sizes and print the results.
     
-Next: [Uncertainty Quantification]()
+Next: [Uncertainty Quantification](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals-and-conversational-agents/blob/main/uncertainty_quantification/README.md)
+
