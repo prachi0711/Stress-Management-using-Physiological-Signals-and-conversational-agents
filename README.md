@@ -15,7 +15,7 @@ This project leverages physiological signals (e.g., IBI from BVP, EDA) from the 
 3. [Stress Classification](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals-and-conversational-agents/blob/main/stress_classification/README.md) 
 4. [Uncertainty Quantification](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals-and-conversational-agents/blob/main/uncertainty_quantification/README.md) 
 5. [Dialogue Manager](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals-and-conversational-agents/blob/main/dialogue_manager/README.md)
-6. [Ros Node](#-Ros Node) 
+6. [Ros Node](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals-and-conversational-agents/blob/main/ros_node/README.md) 
 
 
 # **Workflow Summary**  
