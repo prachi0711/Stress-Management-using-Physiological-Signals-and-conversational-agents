@@ -42,4 +42,5 @@ Results of:
   
  - Incorrect & Uncertain predictions
 
-Next Step: [Dialogue Manager]()
+Next Step: [Dialogue Manager](https://github.com/prachi0711/Stress-Management-using-Physiological-Signals-and-conversational-agents/blob/main/dialogue_manager/README.md)
+
